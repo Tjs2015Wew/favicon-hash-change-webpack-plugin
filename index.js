@@ -5,18 +5,9 @@ const icoHashChange = (path) => {
       fs.readFile(path, (err, data) => {
         if (err) throw err;
         let hexString = data.toString('hex');
-        let flag = hexString.slice(116, 124);
-        let num = parseInt(flag, 16);
-        ++num;
-        let newFlag = num.toString(16);
-        if (newFlag.length != 8) {
-          let arr = new Array(8 - newFlag.length).fill('0');
-          newFlag = arr.join('') + newFlag;
-        }
-        let newHexString = hexString.slice(0, 116) + newFlag + hexString.slice(124);
-
+        let newFlag = `0${new Date().getTime().toString(16)}`;
+        let newHexString = hexString.slice(0, 112) + newFlag + hexString.slice(124);
         let buffer = Buffer.from(newHexString, 'hex');
-
         fs.writeFile(path, buffer, (err) => {
           if (err) throw err;
           console.log('favicon.ico has been updated');
